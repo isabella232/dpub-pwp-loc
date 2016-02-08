@@ -306,8 +306,94 @@ sup {
 
 </head>
 <body>
-<h1>pwp-loc</h1>
+<h1>PWP Locators</h1>
 
 <p>Locator Task Force discussions related to <a href="https://w3c.github.io/dpub-pwp/">PWP</a></p>
+
+<p><strong>This is an initial proposal, likely to change much and often.</strong></p>
+
+<h2><a id="definitions"></a>Definitions</h2>
+
+<dl>
+    <dt id="def_canonical">Canonical</dt>
+    <dd>
+        <p>the mathematical sense: distinguished among entities of its kind,
+            so that it can be picked out in a way that does not depend on any arbitrary choices.</p>
+        <blockquote>
+            <p>These arbitrary choices are, in our case, in 2 dimensions: (1) packed/unpacked,
+                and (2) difference in protocol. See current WD.
+            </p>
+        </blockquote>
+    </dd>
+    <dt id="def_locator">Locator</dt>
+    <dd>URL that points to either an entire PWP or a resource within a PWP</dd>
+    <dt id="def_relative-locator">Relative locator</dt>
+    <dd>A locator to a resource within a PWP, without specifying the location of the PWP</dd>
+    <dt id="def_canonical-url">Canonical URL</dt>
+    <dd>A URL that points to an entire PWP, that is resilient against that PWP changing states</dd>
+    <dt id="def_canonical-locator">Canonical Locator</dt>
+    <dd>A URL that points to a (resource of) a PWP, that is resilient against changes in aforementioned states</dd>
+    <dt id="def_reading-system">Reading system</dt>
+    <dd>A system that is able to handle the PWPs data and metadata, and can map canonical locators to the actual
+        resources.
+        This could be the future browser, a current browser with a plugin, a desktop application, an app, ...
+    </dd>
+</dl>
+
+<h2><a id="proposal"></a>Proposal</h2>
+<p>The canonical locator of a resource of a PWP is constructed by assuming that the PWP is published unpacked.</p>
+<p>So, if you have a file <code>mona lisa.jpg</code>, and that file is in subfolder <code>/img/</code>,
+    and a book is published under <code>http://book.org/books/1/pwp</code>,
+    then the canonical locator is <code>http://book.org/books/1/pwp/img/mona%20lisa.jpg</code>.
+    When someone downloads the book to <code>file://book.packed</code>,
+    and creates a locator to <code>mona lisa.jpg</code>,
+    the locator to that file will remain <code>http://book.org/books/1/pwp/img/mona%20lisa.jpg</code>, but the actual
+    location will be the file <code>img/mona%20lisa.jpg</code> inside the package <code>file://book.packed</code>.</p>
+
+<h3><a id="Q1"></a>Q1: So, how does a reading system go from the canonical locator to the actual locator?</h3>
+<p>Every PWP has metadata [1]. One of these fields is the canonical URL, i.e., <code>http://book.org/books/1/pwp</code>
+    [2].
+    When locating a resource within a local PWP using a canonical locator, you can use the canonical URL from the PWP’s
+    metadata to map from the canonical locator to the local locator.
+    E.g., fetching <code>img/mona%20lisa.jpg</code> within <code>file://book.packed</code>.</p>
+<h3><a id="Q2"></a>Q2: So, what happens when I copy my PWP to another computer?</h3>
+<p>The canonical locator remains the same, but the location of PWP changes.
+    The reading system knows where the local PWP is, e.g., <code>file://home/books/book.packed</code>, and can use the
+    same mapping mechanism to fetch <code>img/mona%20lisa.jpg</code>.</p>
+<h3><a id="Q3"></a>Q3: So, what happens when I alter my PWP?</h3>
+<p>Nothing changes with the previous PWPs, nor with the canonical locator.
+    If you are very concerned with having correct metadata (aren’t we all?),
+    you alter the metadata of the PWP: the canonical URL changes to, e.g. <code>http://school.org/course/10/pwp</code>,
+    and you can keep the original canonical URL as extra metadata [3].</p>
+<blockquote>
+    <p>This could result in a trail of breadcrumbs, when you make changes on already changed PWPs</p>
+</blockquote>
+<p>Smart reading systems might use these breadcrumbs to allow for indirection.
+    E.g., when someone adds an annotation to <code>http://book.org/books/1/pwp/img/mona%20lisa.jpg</code>,
+    the annotation-aware reading system sees in the metadata that this PWP with canonical URL <code>http://school.org/course/10/pwp</code>
+    is derived from <code>http://book.org/books/1/pwp</code>,
+    so it can do a best effort to try and locate <code>img/mona%20lisa.jpg</code> within <code>http://school.org/course/10/pwp</code>,
+    and show the annotation at the correct position.</p>
+<h3><a id="Q4"></a>Q4: So, what if the PWP isn’t published unpacked? What do I get when I <code>GET
+    http://book.org/books/1/pwp/img/mona%20lisa.jpg</code>?</h3>
+<p>In one way or another [4], you get the canonical URL from that GET request, and fetch the PWP that is hosted there
+    (e.g., a packed PWP hosted on <code>http://book.org/books/1/pwp</code>).
+    Your reading system can then again map the canonical locator to the relative locator, and fetch the resource within
+    the package.</p>
+<h3><a id="Q5"></a>Q5: So, what if your PWP isn’t published online at all?</h3>
+<p>Then the PWP isn’t accessible online.</p>
+<p>However, the same PWP that is distributed internally can have a canonical URL, and so, locators <em>can</em> be
+    shared.
+    E.g., a law document is made by Annie (with canonical URL <code>intranet://annie/law1</code>) and sent to Bob (so
+    Bob’s copy also has canonical URL <code>intranet://annie/law1</code>).
+    Bob mails to Annie: "Remove the first footnote of <code>intranet://annie/law1/chapter2.html</code>".
+    Both Annie’s and Bob’s reading system can fetch that resource by mapping the canonical URL to the local PWP.</p>
+<p>[1] Where this metadata resides is to be discussed. Inside the manifest makes sense, but including it in the html
+    pages might also be an option.<br>
+    [2] E.g., &lt;link rel="<a href="http://pwp.org/canonical">http://pwp.org/canonical</a>" href="<a
+            href="http://book.org/books/1/pwp">http://book.org/books/1/pwp</a>“/&gt;<br>
+    [3] E.g., &lt;link rel=”<a href="http://pwp.org/breadcrumb">http://pwp.org/breadcrumb</a>" href="<a
+            href="http://book.org/books/1/pwp">http://book.org/books/1/pwp</a>"/&gt;<br>
+    [4] E.g., using HTTP Link Headers, TBD.</p>
 </body>
 </html>
