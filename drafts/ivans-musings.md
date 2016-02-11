@@ -40,8 +40,8 @@ Some things we may already have an agreement on:
 
 Two fundamental (and related) questions we have to answer:
 
-* **Q1**: What is the answer of **S** to a `HTTP Get http://book.org/published-books/1` request?
-* **Q2**: How does a PWP Processor accesses the Mona Lisa image when `http://book.org/published-books/1/img/mona_lisa.jpg` is requested by the Reading System?
+* **Q1**: What is the answer of **S** to a `HTTP Get http://book.org/published-books/1` request? 
+* **Q2**: How does a PWP Processor accesses the Mona Lisa image when `http://book.org/published-books/1/img/mona_lisa.jpg` is requested by the Reading System? (This, essentially, the **Q4** in the writeup.)
 
 ### Possible answer to **Q2**
 
