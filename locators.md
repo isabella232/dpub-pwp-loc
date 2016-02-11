@@ -147,13 +147,13 @@ to return the metadata.
 
 ## Questions
 
+### Q1: So, how does a reading system go from the canonical locator to the actual locator?
+
 When someone downloads the book to `file://book.packed`,
 and creates a locator to `mona lisa.jpg`,
 the canonical locator to that file will remain `http://book.org/books/1/pwp/img/mona%20lisa.jpg`,
 but the actual location will be the file `img/mona%20lisa.jpg`
 inside the package `file://book.packed`.
-
-### Q1: So, how does a reading system go from the canonical locator to the actual locator?
 
 Every PWP has metadata.
 One of these fields is the canonical locator, i.e., `http://book.org/books/1/pwp`.
