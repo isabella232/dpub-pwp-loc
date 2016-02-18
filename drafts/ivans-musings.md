@@ -34,7 +34,8 @@ Some things we may already have an agreement on:
   * E.g., it can be a specific reading app, containing both the PWP Processor and the Reading system; or it can be an extension/script of some sort in a browser whereby the script implements the PWP Processor and the Reading System tries to push all rendering on the browser's core engine, etc.
 
 * We should aim for a model whereby the Reading System operates exclusively in terms of Canonical Locators and all mapping to and from that conceptual view of Locators to specific, non-canonical locators should be done by the PWP Processor.
-    * Although our discussions should be technology independent, it is clear that this aspect of a PWP Processor, more exactly the implementation strategy thereof, resembles that of Service Workers. Ie, if Service Workers are not available, then the implementation of a PWP Processor may require to implement some of the Service Worker features.
+ 
+> *Note*: Although our discussions should be technology independent, it is clear that this aspect of a PWP Processor, more exactly the implementation strategy thereof, resembles that of Service Workers. In other words, the more detailed description of a PWP Processor will have to define such characteristics on an abstract level.)
 
 ## The questions (and attempted answers)
 
@@ -60,7 +61,7 @@ If these assumptions are correct, then the answer to **Q2** becomes easy:
    * If the preferred state is the packed one, then **Lp** accessed, unpacked, and the image is localized within the unpacked content (and that usually means using the relative URL as some sort of a file system path within that unpacked content)
    * If the preferred state is the unpacked one, then the locator of the image is constructed by using the value of **Lu** and the Relative Locator, yielding `http://book.org/books/1/img/mona_lisa.jpg`.
 
-(There may be “smarter” PWP Processors that make use local facilities like caching, but those do not modify these conceptual approaches.)
+> *Note*: There may be “smarter” PWP Processors that make use local facilities like caching, but those do not modify these conceptual approaches.
 
 ### Possible answer to **Q1**
 
@@ -87,4 +88,4 @@ This reflects various possible scenarios setting up **S** can take. For example,
   * the local preferences of the publisher hardwired in the behavior of **S**
   * if the PWP Processor accompanies its request with the [`Accept`](https://tools.ietf.org/html/rfc7231#section-5.3.2) header, indicating the states that are acceptable by the server and with what priority, **S** may be set up to honor that part of the request (i.e., implementing content negotiations)
 
-There may be other scenarios on the server side; it is out of scope for PWP to define those.
+> *Note*: there may be other scenarios on the server side; it is out of scope for PWP to define those.
