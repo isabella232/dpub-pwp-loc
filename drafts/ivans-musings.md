@@ -8,7 +8,8 @@ Let us clarify what the problem we try to solve... (The URI-s below are slightly
 Let us suppose we have:
 
 * A PWP (denoted by **P**) that includes the resource for an image of the Mona Lisa.
-* **P** has a set of metadata (part of a manifest) associated to it. That set will be referred to by **M**. (The format and syntax is to be defined later.)
+* **P** has a set of metadata associated to it. That set will be referred to by **M**. (The format and syntax is to be defined later.)
+   * It must be emphasized that there is no requirement of having a one to one correspondence between **M** as a conceptual entity and a specific file, like a manifest file. A manifest file _may_ contain other type of information that one would not consider as metadata; also, elements of **M** may be combined from different sources (e.g., different manifest files, information conveyed through HTTP Responses, etc.)
 * **P** is published on the server **S**, and it is published in *at least one* of the different states (“at least one” insofar as there is no requirement that the publisher publishes all these states, it may choose to publish only one):
    * In an “unpacked” state, i.e., as a hierarchy of files on the server. The “top level” of this unpacked state is available through the URL `http://book.org/books/1/`: this is the (absolute) Locator of **P** *in this state*. Let us refer to this as **Lu**.
      * in this setup, the image of the Mona Lisa has the URL `http://book.org/books/1/img/mona_lisa.jpg`. This is the absolute locator of the image *in this state*.  
@@ -21,7 +22,7 @@ Let us suppose we have:
 
 The goal of the PWP is that (quoting from the PWP draft):
 
->  “In this vision, the current format- and workflow-level separation between offline/portable and online (Web) document publishing is diminished to zero. These are merely two dynamic manifestations of the same publication: content authored with online use as the primary mode can easily be saved by the user for offline reading in portable document form.”
+“In this vision, the current format- and workflow-level separation between offline/portable and online (Web) document publishing is diminished to zero. These are merely two dynamic manifestations of the same publication: content authored with online use as the primary mode can easily be saved by the user for offline reading in portable document form.”
 
 The translation, in practical terms, is that, whenever possible, the absolute locator **L**  should be used when referring to **P** in, e.g., annotations. This is also true URL-s derived from **L** like `http://book.org/published-books/1/img/mona_lisa.jpg`.
 
@@ -32,9 +33,8 @@ Some things we may already have an agreement on:
 * **M** contains a reference to **L**, and **M** is also available in all the different states of **P**.
 * It is to be expected that a client will need to include/use a PWP Processor of some sort.
   * E.g., it can be a specific reading app, containing both the PWP Processor and the Reading system; or it can be an extension/script of some sort in a browser whereby the script implements the PWP Processor and the Reading System tries to push all rendering on the browser's core engine, etc.
-
 * We should aim for a model whereby the Reading System operates exclusively in terms of Canonical Locators and all mapping to and from that conceptual view of Locators to specific, non-canonical locators should be done by the PWP Processor.
- 
+
 > *Note*: Although our discussions should be technology independent, it is clear that this aspect of a PWP Processor, more exactly the implementation strategy thereof, resembles that of Service Workers. In other words, the more detailed description of a PWP Processor will have to define such characteristics on an abstract level.)
 
 ## The questions (and attempted answers)
@@ -69,19 +69,23 @@ For the previous mechanism to work, the following statement, partially answering
 
 * The answer to `HTTP Get http://book.org/published-books/1` *must* make **M** available to the PWP Processor  
 
-However, there is no one, and only one, way to achieve that (and probably there should not be). Instead, a PWP Processor must be prepared to some alternatives. The final list of those alternatives should be part of a more precise specification for a PWP, but some of the conceivable ones are as follows. The response of **S** (i.e., the answer to **Q1**) is:
+However, there is no one, and only one, way to achieve that. Instead, a PWP Processor must be prepared to some alternatives. The final list of those alternatives should be part of a more precise specification for a PWP; some of the possible variations are as follows. The response of **S** (i.e., the answer to **Q1**) is:
 
-* **M** itself (e.g., a JSON file, and RDFa+HTML file, etc., whatever is specified for the exact format and media type of **M** at some point); or
-* a package in some predefined PWP format that _must_ include **M**; or
-* an HTML, SVG, or other resource, representing, e.g., the cover page of the publication, with **M** referred to in the [`Link`](https://tools.ietf.org/html/rfc5988) header of the HTTP Response; or
-* an (X)HTML file containing the `<link>` element referring to **M**
+* **M** itself (serialized as a JSON file, and RDFa+HTML file, etc.); or
+   * it may be important to return, as part of the HTTP response, a distinctive media type for the serialization of **M**
+* a package in some predefined PWP format that _must_ include a manifest containing **M** (or a subset thereof); or
+* an HTML, SVG, or other resource, representing, e.g., the cover page of the publication, with **M** (or a subset thereof) provided through the [`Link`](https://tools.ietf.org/html/rfc5988) header of the HTTP Response; or
+* an (X)HTML file containing the `<link>` element referring to **M** (or a subset thereof)
 
-(The relative priorities of these alternatives must be specified.)
+These possibilities are not mutually exclusive. Each returned information, by itself, may be incomplete (hence the remark 'subset thereof') and a combination of those, or other possibilities, may provide the complete **M**.
 
+> A typical example may be when the manifest file returned from the packed state would not include **Lu**; this may be returned via the HTTP Response LINK header
 
-This reflects various possible scenarios setting up **S** can take. For example, when `http://book.org/published-books/1` is requested,
+> **Note:** The relative priorities of these alternatives must be specified.
 
-* **S** returns **M**. Ie, the publisher publishes the metadata for all its publications at one place, referring to the various, available, states on its site.
+Whilst the statements above would be defined normatively in a specification of PWP, how exactly to set up **S** to achieve these should be left open. Depending on the possibilities and priorities of a server, there are indeed several conceivable setups. We list some of those below for informative purposes. For example, when `http://book.org/published-books/1` is requested,
+
+* **S** may return the complete **M**. Ie, the publisher publishes the metadata for all its publications at one place, referring to the various, available, states on its site.
 * **S** returns the index file in HTML of the unpacked state (i.e., using **Lu**) with the relevant `<link>` element
   * this can be achieved, for example, by setting a symbolic link (in UNIX terms) on **S** pointing from `/published-books/1` to `/books/1`
 * If the various states are published in the same directory, i.e., for example, if **Lu** is set to `http://ex.org/books/xxx/`, **Lp** is set to `http://ex.org/books/xxx.pwp` and **L** is announced as `http://ex.org/books/xxx` (note the missing trailing `/`!) then **S** may have its own logic deciding which state to return with the corresponding **M**. The logic may be based on:
