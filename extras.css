@@ -1,0 +1,24 @@
+
+a.sec-ref:before {
+    content: "“";
+}
+
+a.sec-ref:after  {
+    content: "”";
+}
+
+span.orcid a  {
+    text-decoration: none !important;
+    border: none !important;
+}
+
+span.orcid a img {
+    transform: translateY(3px);
+}
+
+
+
+/*span.orcid:before {
+    content: url(figures/orcid_logo.png);
+    margin-right: 2px;
+}*/

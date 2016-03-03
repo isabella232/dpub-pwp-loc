@@ -3,6 +3,7 @@
 <head>
     <title>PWP Locators</title>
     <meta charset='utf-8'>
+    <link rel="stylesheet" type="text/css" href="extras.css" />
     <script src="https://www.w3.org/Tools/respec/respec-w3c-common" async="" class="remove"></script>
     <style type="text/css">
         code {
@@ -43,6 +44,11 @@
                     , mailto: "ben.demeester@ugent.be"
                     , company: "Ghent University - iMinds - Data Science Lab"
                     , url: "http://users.ugent.be/~bjdmeest/"
+                    , extras: [{
+                    name: "<img src='figures/orcid_logo.png' />",
+                    href: "http://orcid.org/0000-0003-0248-0987",
+                    class: "orcid"
+                }]
                     , companyURL: "http://www.iminds.be/"
                 },
                 {
@@ -52,7 +58,7 @@
                     , companyURL: "http://www.w3.org"
                     , url: "http://www.w3.org/People/Ivan/"
                     , extras: [{
-                    name: "0000-0003-0782-2704",
+                    name: "<img src='figures/orcid_logo.png' />",
                     href: "http://orcid.org/0000-0003-0782-2704",
                     class: "orcid"
                 }]
@@ -99,8 +105,6 @@
             ],
             // alternateFormats: [],
             charterDisclosureURI: "http://www.w3.org/2004/01/pp-impl/64149/status",
-            // Early experimentation with the new TR style, as defined by Fantasai
-            useExperimentalStyles: true,
             // URI of the patent status for this WG, for Rec-track documents
             // !!!! IMPORTANT !!!!
             // This is important for Rec-track documents, do not copy a patent URI from a random
@@ -286,7 +290,7 @@
     </section>
 
     <figure id="fig-flow-get-l">
-        <img src="http://w3c.github.io/dpub-pwp-loc/drafts/PWPClient3.png" alt="Flowchart of what happens when a Portable Web Publication is retrieved by the user"/>
+        <img src="drafts/PWPClient3.svg" alt="Flowchart of what happens when a Portable Web Publication is retrieved by the user"/>
         <figcaption>Flowchart of what happens when a <a>PWP</a> is retrieved by the user</figcaption>
     </figure>
 
