@@ -154,6 +154,11 @@
         <li>
             A <dfn>locator</dfn> is a URL that points to either an entire PWP or a resource within a PWP.
         </li>
+    </ul>
+    <section class="note">
+        <p>To be more exact, a locator is always a resource locator. This resource part is implied, but omitted for brevity.</p>
+    </section>
+    <ul>
         <li>
             A <dfn>PWP locator</dfn> is a <a>locator</a> to the PWP as a whole.
             This PWP is always in a certain state. Also called “State locator”.
@@ -178,11 +183,6 @@
     <ul>
         <li>A <dfn>relative locator</dfn> is a locator to a resource within a <a>PWP</a>, without specifying the location of the <a>PWP</a>.</li>
         <li>An <dfn>absolute locator</dfn> is a combination of a <a>PWP locator</a> and a <a>relative locator</a>.</li>
-    </ul>
-    <section class="note">
-        <p>To be more exact, a locator is always a resource locator. This resource part is implied, but omitted for brevity.</p>
-    </section>
-    <ul>
         <li><dfn>Canonical</dfn> is defined in the <a href="https://en.wiktionary.org/wiki/canonical">mathematical sense</a>:
             distinguished among entities of its kind,
             so that it can be picked out in a way
@@ -201,6 +201,13 @@
             This is pure conceptual, i.e., the <a>PWP</a> does not have to be published unpacked online.
             Throughout the document, we will use <dfn>L</dfn> as the <a>canonical locator</a> of a published <a>PWP</a>.
         </li>
+    </ul>
+    <section class="note">
+        <p>
+            There is no requirement that <a>L</a> <em>must</em> be different from <a>Lu</a>.
+        </p>
+    </section>
+    <ul>
         <li>
             The <dfn>manifest</dfn> is in this document all metadata of a <a>PWP</a>.
             This includes a list of all the spine items, <a>L</a>, <a>Lu</a>, and <a>Lp</a> (given both <a>Lu</a> and <a>Lp</a> exist).
@@ -257,13 +264,13 @@
         <p>
             As the example shows, the exact URL string may be structurally different from both <a>Lu</a> and <a>Lp</a>, i.e.,
             it is not necessarily a substring of one or the other).
-            <a>L</a> <em>may</em> be identical to <a>Lu</a> but not necessarily.
+            <a>L</a> <em>may</em> be identical to <a>Lu</a>, but not necessarily.
         </p>
     </section>
     <p>
         The translation, in practical terms, is that, whenever possible,
         the absolute locator <a>L</a> should be used when referring to <a>P</a> in, e.g., annotations.
-        This is also true URL-s derived from <a>L</a> like <code>http://book.org/published-books/1/img/mona_lisa.jpg</code>.
+        This is also true for URL-s derived from <a>L</a> like <code>http://book.org/published-books/1/img/mona_lisa.jpg</code>.
     </p>
 </section>
 
@@ -274,15 +281,15 @@
 
     <section class="note">
         <p>
-            If the PWP Processor already has the cached publication,
+            If the <a>PWP processor</a> already has the cached publication,
             than that will probably prevail (modulo cache state) and there may be no HTTP request in the first place.
-            This really refers to the situation of a first access.
+            This section really refers to the situation of a first access.
         </p>
     </section>
 
     <section class="issue">
         <p>
-            Do we have to specify what happens when the PWP already has a cached version?
+            Do we have to specify what happens when the <a>PWP processor</a> already has a cached version?
             I.e., if the user is online, and the online version may be updated,
             (and <a>P</a> allows for automatic updating,)
             does the cache than <em>have</em> to be updated?
@@ -363,7 +370,7 @@
     <section class="issue">
         <p>
             There is the issue of preference of media type of the <a>PWP processor</a>.
-            whether this preference is based on some local consideration,
+            Whether this preference is based on some local consideration,
             like network speed, PWP size, etc., or is set by the user, is a different problem that will require separate considerations.
         </p>
         <p>
@@ -391,10 +398,8 @@
     </p>
 
     <section class="issue">
-        To be discussed.
-    </section>
-
-    <p>
+        <p>
+        To be discussed. <em>Proposal:</em>
         This depends on the configuration of the server.
         If the server has the implemented functionality to unpack the <a>PWP</a> server-side,
         it could return the resource immediately.
@@ -402,7 +407,8 @@
         the <a>PWP processor</a> can see (based on the returned content type)
         what kind of package is returned when an individual resource is requested,
         unpack <a>P</a> client-side, and return the resource of the local unpacked <a>P</a> to the <a>reading system</a>.
-    </p>
+        </p>
+    </section>
 
 </section>
 
@@ -435,7 +441,7 @@
 
     <p>When I download a <a>PWP</a>, and copy that <a>PWP</a> to a different location, than we still talk about the same <a>PWP</a>.</p>
 
-    <p>However, when, e.g., a teacher adds annotations inside the <a>PWP</a>, he or she creates a new, altered <a>PWP</a>, <a data-lt="P">P'</a>.</p>
+    <p>However, when, e.g., a teacher adds annotations inside the <a>PWP</a>, he or she creates a new, altered <a>PWP</a>, i.e., <a data-lt="P">P'</a>.</p>
 
     <p>
         To keep the connections between <a>P</a> and <a data-lt="P">P'</a>,
