@@ -233,13 +233,13 @@
     <ul>
         <li>
             In an “unpacked” state, i.e., as a hierarchy of files on the server.
-            The “top level” of this unpacked state is available through the URL <code>http://book.org/books/1/</code> (<a>Lu</a>):
-            in this setup, the image of the Mona Lisa has the URL <code>http://book.org/books/1/img/mona_lisa.jpg</code>.
+            The “top level” of this unpacked state is available through the URL <code>https://example.org/books/1/</code> (<a>Lu</a>):
+            in this setup, the image of the Mona Lisa has the URL <code>https://example.org/books/1/img/mona_lisa.jpg</code>.
             This is the <a>absolute locator</a> of the image in this state.
         </li>
         <li>
             In a “packed” state, namely as part of a, say, zip file (but with a PWP-specific media type).
-            This is available through the URL <code>http://book.org/packed-books/1/package.pwp</code>.
+            This is available through the URL <code>https://example.org/packed-books/1/package.pwp</code>.
             This is the <a>absolute locator</a> of <a>P</a> in this state, namely <a>Lp</a>.
         </li>
     </ul>
@@ -254,8 +254,8 @@
         </p>
     </section>
     <p>
-        <a>P</a> is assigned a <a>canonical locator</a>, the URL <code>http://book.org/published-books/1</code> (<a>L</a>).
-        Reflecting the unpacked state in terms of (file) structure the <a>canonical locator</a> of the Mona Lisa image is <code>http://book.org/published-books/1/img/mona_lisa.jpg</code>.
+        <a>P</a> is assigned a <a>canonical locator</a>, the URL <code>https://example.org/published-books/1</code> (<a>L</a>).
+        Reflecting the unpacked state in terms of (file) structure the <a>canonical locator</a> of the Mona Lisa image is <code>https://example.org/published-books/1/img/mona_lisa.jpg</code>.
     </p>
     <section class="note">
         <p>
@@ -267,7 +267,7 @@
     <p>
         The translation, in practical terms, is that, whenever possible,
         the absolute locator <a>L</a> should be used when referring to <a>P</a> in, e.g., annotations.
-        This is also true for URL-s derived from <a>L</a> like <code>http://book.org/published-books/1/img/mona_lisa.jpg</code>.
+        This is also true for URL-s derived from <a>L</a> like <code>https://example.org/published-books/1/img/mona_lisa.jpg</code>.
     </p>
 </section>
 
@@ -345,7 +345,7 @@
         </li>
         <li>
             If the preferred state is the unpacked one, then the locator of the image is constructed by using <a>Lu</a> and the <a>relative locator</a>,
-            yielding <code>http://book.org/books/1/img/mona_lisa.jpg</code>.
+            yielding <code>https://example.org/books/1/img/mona_lisa.jpg</code>.
         </li>
     </ul>
 
@@ -401,13 +401,13 @@
         E.g., <a>P</a> might contain <code>canonical: L, breadcrumbs: []</code>,
         as it is an unaltered version of the original <a>PWP</a>, published under <a>L</a>.
         <a data-lt="P">P'</a> however might be published at the school of the teacher,
-        under <code>http://school.org/course/french/frenchbook</code> (<a data-lt="L">L'</a>),
+        under <code>https://example.org/course/french/frenchbook</code> (<a data-lt="L">L'</a>),
         and contain <code>canonical: L', breadcrumbs: [L]</code>.
     </p>
 
     <p>
         A student may then again copy <a data-lt="P">P'</a> to his own web space,
-        and makes annotations (<a data-lt="P">P''</a> under <code>http://school.org/student/1/frenchbook</code>, <a data-lt="L">L''</a>).
+        and makes annotations (<a data-lt="P">P''</a> under <code>https://example.org/student/1/frenchbook</code>, <a data-lt="L">L''</a>).
         <a data-lt="P">P''</a> may then contain <code>canonical: L'', breadcrumbs: [L, L']</code>
     </p>
 
