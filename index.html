@@ -291,26 +291,28 @@
         <p>
             Please note that the HTTP GET <a>L</a> takes into account both the top and bottom part of the flow chart in parallel, i.e.,
             there are multiple ways of trying to reconstruct the <a>manifest</a>.
-            These options that the <a>server</a> may return include (but are not limited to):
+            These options that the <a>server</a> may use to return (a part of) the <a>manifest</a> include (but are not limited to):
         </p>
 
     <ul>
-        <li>the entire <a>manifest</a> (serialized as a JSON file, RDFa+HTML file, etc.); or</li>
-        <li>a package in some predefined PWP format that must include (a subset of) the <a>manifest</a>; or</li>
-        <li>an HTML, SVG, or other resource, representing, e.g., the cover page of the publication, with (a subset of) the <a>manifest</a> provided through the Link header of the HTTP Response; or</li>
-        <li>an (X)HTML file containing the <code>&lt;link&gt;</code> element referring to (a subset of) the <a>manifest</a></li>
+        <li>an (X)HTML file containing the <code>&lt;link&gt;</code> element referring to (a part of) the <a>manifest</a>; or</li>
+        <li>an (X)HTML file (or maybe another type of resource) that has (a part of) the <a>manifest</a> embedded; or</li>
+        <li>the <a>manifest</a> as direct payload (serialized as a JSON file, RDFa+HTML file, etc.); or</li>
+        <li>a package in some predefined PWP format that must include (a part of) the <a>manifest</a>; or</li>
+        <li>an HTML, SVG, or other resource, with (a part of) the <a>manifest</a> provided through the Link header of the HTTP Response.</li>
     </ul>
 
     <section class="note">
-        <p>It may be important to return, as part of the HTTP response, a distinctive media type for the serialization of the entire <a>manifest</a>.</p>
+        <p>It may be important to return, as part of the HTTP response, a distinctive media type for the serialization of the <a>manifest</a> as direct payload.</p>
     </section>
 
     <section class="note">
         <p>
             These possibilities are not mutually exclusive.
-            Each returned information, by itself, may be incomplete (hence the remark 'subset thereof')
+            Each returned information, by itself, may be incomplete (hence the remark 'part thereof')
             and a combination of those, or other possibilities
             may provide the complete <a>manifest</a>.
+            Moreover, all these manifest-parts could be different, overlap, or have different information.
         </p>
     </section>
 
