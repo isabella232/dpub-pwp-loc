@@ -137,12 +137,11 @@
     <ul>
         <li>
             A Portable Web Document (<dfn>PWP</dfn>) is defined in <a href="http://w3c.github.io/dpub-pwp/">following document</a>.
-            The example <a>PWP</a> in this document is denoted <dfn>P</dfn>.
         </li>
         <li>A <dfn>reading system</dfn> has the responsibility of the rendering the contents of a <a>PWP</a>.</li>
         <li>
             A <dfn>PWP processor</dfn> is a piece of functionality
-            that has the responsibility of interpreting a <a>PWP</a> and its different locators,
+            that has the responsibility of interpreting a <a>PWP</a> and its different <a data-lt="locator">locators</a>,
             to pass the correct requested resources to the <a>reading system</a>.
             All mapping to and from <a data-lt="canonical locator">canonical locators</a> to specific, non-canonical locators should be done by the <a>PWP Processor</a>.
         </li>
@@ -162,8 +161,6 @@
         <li>
             A <dfn>PWP locator</dfn> is a <a>locator</a> to the PWP as a whole.
             This PWP is always in a certain state. Also called “State locator”.
-            Throughout the document, we will use <dfn>Lu</dfn> as the PWP Locator of the published unpacked <a>P</a>,
-            and <dfn>Lp</dfn> as the PWP Locator of the published packed <a>P</a>.
             This <a>PWP Locator</a> can be dereferenced via an HTTP request and should return some information.
             As such, it is not the same as an identifier, although, it <em>could</em> be the same.
         </li>
@@ -174,13 +171,12 @@
             contain exactly the same abstract content, and should be the same in terms of structure.
         </p>
         <p>
-            There is no requirement that the publisher publishes all these states, it may choose to publish only one, i.e.,
-            <a>Lu</a> and <a>Lp</a> don't have to both exist.
-            There can be situations where the <a>PWP</a> is only published unpacked (so only <a>Lu</a> exists),
-            or only published packed (so only <a>Lp</a> exists).
+            There is no requirement that the publisher publishes all these states, it may choose to publish only one.
+            There can be situations where the <a>PWP</a> is only published unpacked (so only the locator of the published unpacked <a>PWP</a> exists),
+            or only published packed (so only that locator exists).
         </p>
         <p>
-            Also, the packaging format of <a>Lp</a> is currently not defined, and is not required for this document.
+            Also, the possible packaging formats to pack a <a>PWP</a> is currently not defined, and is not required for this document.
         </p>
     </section>
     <ul>
@@ -202,19 +198,18 @@
             The <dfn>canonical locator</dfn> is an absolute and state independent locator.
             The <a>canonical locator</a> is constructed as if the <a>PWP</a> was published unpacked online.
             This is pure conceptual, i.e., the <a>PWP</a> does not have to be published unpacked online.
-            Throughout the document, we will use <dfn>L</dfn> as the <a>canonical locator</a> of a published <a>PWP</a>.
         </li>
     </ul>
     <section class="note">
         <p>
-            There is no requirement that <a>L</a> <em>must</em> be different from <a>Lu</a>.
+            There is no requirement that the <a>canonical locator</a> <em>must</em> be different from the locator of the published unpacked <a>PWP</a>.
         </p>
     </section>
     <ul>
         <li>
             The <dfn>manifest</dfn> is in this document all metadata of a <a>PWP</a>.
-            This includes a list of all the spine items, <a>L</a>, <a>Lu</a>, and <a>Lp</a> (given both <a>Lu</a> and <a>Lp</a> exist).
-            The <a>manifest</a> should be available in all different states of <a>P</a>.
+            This includes a list of all the spine items, the <a>canonical locator</a>, and all existing <a data-lt="PWP locator">PWP locators</a>.
+            The <a>manifest</a> should be made available when requesting any <a>PWP locator</a>.
         </li>
     </ul>
     <section class="note">
@@ -229,21 +224,21 @@
 <section id="problem">
     <h2>The Problem</h2>
     <p>
-        <a>P</a> is published on the <a>server</a>.
-        <a>P</a> includes the resource for an image of the Mona Lisa,
+        A <a>PWP</a> is published on the <a>server</a>.
+        This <a>PWP</a> includes the resource for an image of the Mona Lisa,
         and it is published in at least one of the different states:
     </p>
     <ul>
         <li>
             In an “unpacked” state, i.e., as a hierarchy of files on the server.
-            The “top level” of this unpacked state is available through the URL <code>https://example.org/books/1/</code> (<a>Lu</a>):
+            The “top level” of this unpacked state is available through the URL <code>https://example.org/books/1/</code>:
             in this setup, the image of the Mona Lisa has the URL <code>https://example.org/books/1/img/mona_lisa.jpg</code>.
             This is the <a>absolute locator</a> of the image in this state.
         </li>
         <li>
             In a “packed” state, namely as part of a, say, zip file (but with a PWP-specific media type).
             This is available through the URL <code>https://example.org/packed-books/1/package.pwp</code>.
-            This is the <a>absolute locator</a> of <a>P</a> in this state, namely <a>Lp</a>.
+            This is the <a>absolute locator</a> of the <a>PWP</a> in this state.
         </li>
     </ul>
     <section class="note">
@@ -253,27 +248,27 @@
         </p>
     </section>
     <p>
-        <a>P</a> is assigned a <a>canonical locator</a>, the URL <code>https://example.org/published-books/1</code> (<a>L</a>).
+        The published <a>PWP</a> is assigned a <a>canonical locator</a>, e.g., the URL <code>https://example.org/published-books/1</code>.
         Reflecting the unpacked state in terms of (file) structure the <a>canonical locator</a> of the Mona Lisa image is <code>https://example.org/published-books/1/img/mona_lisa.jpg</code>.
     </p>
     <section class="note">
         <p>
-            As the example shows, the exact URL string may be structurally different from both <a>Lu</a> and <a>Lp</a>, i.e.,
-            it is not necessarily a substring of one or the other).
-            <a>L</a> <em>may</em> be identical to <a>Lu</a>, but not necessarily.
+            As the example shows, the exact URL string of the <a>canonical locator</a> may be structurally different from the <a data-lt="PWP locator">PWP locators</a>, i.e.,
+            it is not necessarily a substring of one or the other.
+            The <a>canonical locator</a> <em>may</em> be identical to the <a>PWP locator</a> of the unpacked state, but not necessarily.
         </p>
     </section>
     <p>
         The translation, in practical terms, is that, whenever possible,
-        the absolute locator <a>L</a> should be used when referring to <a>P</a> in, e.g., annotations.
-        This is also true for URL-s derived from <a>L</a> like <code>https://example.org/published-books/1/img/mona_lisa.jpg</code>.
+        the <a>canonical locator</a> should be used when referring to the published<a>PWP</a> in, e.g., annotations.
+        This is also true for URL-s derived from the <a>canonical locator</a>, like <code>https://example.org/published-books/1/img/mona_lisa.jpg</code>.
     </p>
 </section>
 
 <section id="pwp-processor">
     <h2>Functionalities of the <a>PWP processor</a></h2>
 
-    <p>See <a href="#fig-flow-get-l"></a> for the flow chart of when a <a>PWP processor</a> requests <a>P</a> (thus does a HTTP GET request on <a>L</a>).</p>
+    <p>See <a href="#fig-flow-get-l"></a> for the flow chart of when a <a>PWP processor</a> requests a published <a>PWP</a> (thus does a HTTP GET request on the <a>canonical locator</a>).</p>
 
     <section class="note">
         <p>
@@ -285,11 +280,11 @@
 
     <figure id="fig-flow-get-l" class="overlarge">
         <img src="drafts/PWPClient3.svg" alt="Flowchart of what happens when a Portable Web Publication is retrieved by the user"/>
-        <figcaption>Flowchart of what happens when a <a>PWP</a> is retrieved by the user. (The image is available in <a href="drafts/PWPClient3.svg">SVG</a> or <a href="drafts/PWPClient3.png">PNG</a> formats.)</figcaption>
+        <figcaption>Flowchart of what happens when a published <a>PWP</a> is retrieved by the user. (The image is available in <a href="drafts/PWPClient3.svg">SVG</a> or <a href="drafts/PWPClient3.png">PNG</a> formats.)</figcaption>
     </figure>
 
         <p>
-            Please note that the HTTP GET <a>L</a> takes into account both the top and bottom part of the flow chart in parallel, i.e.,
+            Please note that the HTTP GET on the <a>canonical locator</a>takes into account both the top and bottom part of the flow chart in parallel, i.e.,
             there are multiple ways of trying to reconstruct the <a>manifest</a>.
             These options that the <a>server</a> may use to return (a part of) the <a>manifest</a> include (but are not limited to):
         </p>
@@ -321,13 +316,13 @@
 
     <p>
         The full <a>manifest</a> is constructed using multiple options.
-        In the end, the <a>manifest</a> should consists of all metadata to render <a>P</a>,
+        In the end, the <a>manifest</a> should consists of all metadata to render the published <a>PWP</a>,
         but also all available <a data-lt="PWP locator">PWP locators</a> on the <a>server</a>.
     </p>
 
     <p>
-        Once the full <a>manifest</a> is constructed, <a>P</a> can be retrieved, or a resource within <a>P</a> can be retrieved.
-        Based on <a>L</a>, the <a>PWP processor</a> can derive a <a>relative locator</a> for the image, i.e., <code>img/mona_lisa.jpg</code>.
+        Once the full <a>manifest</a> is constructed, the published <a>PWP</a> can be retrieved, or a resource within that <a>PWP</a> can be retrieved.
+        Based on the <a>canonical locator</a>, the <a>PWP processor</a> can derive a <a>relative locator</a> for the image, i.e., <code>img/mona_lisa.jpg</code>.
     </p>
 
     <p>
@@ -335,12 +330,12 @@
         </p>
     <ul>
         <li>
-            If the preferred state is the packed one, then <a>Lp</a> is accessed, unpacked,
+            If the preferred state is the packed one, then the <a>PWP locator</a> of the packed state is accessed, unpacked,
             and the image is localized within the unpacked content
             (and that usually means using the <a>relative locator</a> as some sort of a file system path within that unpacked content).
         </li>
         <li>
-            If the preferred state is the unpacked one, then the locator of the image is constructed by using <a>Lu</a> and the <a>relative locator</a>,
+            If the preferred state is the unpacked one, then the locator of the image is constructed by using the <a>PWP locator</a> of the unpacked state and the <a>relative locator</a>,
             yielding <code>https://example.org/books/1/img/mona_lisa.jpg</code>.
         </li>
     </ul>
@@ -384,29 +379,34 @@
         <p>To be discussed.</p>
     </section>
 
-    <p>When I download a <a>PWP</a>, and copy that <a>PWP</a> to a different location, than we still talk about the same <a>PWP</a>.</p>
+    <p>
+        When I download a <a>PWP</a> (for this example denoted as <code>P</code>, with <a>canonical locator</a> <code>L</code>),
+        and copy that <a>PWP</a> to a different location, then we still talk about the same <a>PWP</a>.
+    </p>
 
-    <p>However, when, e.g., a teacher adds annotations inside the <a>PWP</a>, he or she creates a new, altered <a>PWP</a>, i.e., <a data-lt="P">P'</a>.</p>
+    <p>However, when, e.g., a teacher adds annotations inside the <a>PWP</a>, he or she creates a new, altered <a>PWP</a>, e.g., <code>P'</code>.</p>
 
     <p>
-        To keep the connections between <a>P</a> and <a data-lt="P">P'</a>,
+        To keep the connections between <code>P</code> and <code>P'</code>,
         we can allow for a trail of breadcrumbs, to be persisted inside the <a>PWP</a>.
-        E.g., <a>P</a> might contain <code>canonical: L, breadcrumbs: []</code>,
-        as it is an unaltered version of the original <a>PWP</a>, published under <a>L</a>.
-        <a data-lt="P">P'</a> however might be published at the school of the teacher,
-        under <code>https://example.org/course/french/frenchbook</code> (<a data-lt="L">L'</a>),
+        E.g., <code>P'</code> might contain <code>canonical: L, breadcrumbs: []</code>,
+        as it is an unaltered version of the original <a>PWP</a>, published with <a>canonical locator</a> <code>L</code>.
+    </p>
+    <p>
+        <code>P'</code> however might be published at the school of the teacher,
+        under <code>https://example.org/course/french/frenchbook</code> (and thus with a different <a>canonical locator</a>, e.g., <code>L'</code>),
         and contain <code>canonical: L', breadcrumbs: [L]</code>.
     </p>
 
     <p>
-        A student may then again copy <a data-lt="P">P'</a> to his own web space,
-        and makes annotations (<a data-lt="P">P''</a> under <code>https://example.org/student/1/frenchbook</code>, <a data-lt="L">L''</a>).
-        <a data-lt="P">P''</a> may then contain <code>canonical: L'', breadcrumbs: [L, L']</code>
+        A student may then again copy <code>P'</code> to his own web space,
+        and makes annotations (<code>P''</code> under <code>https://example.org/student/1/frenchbook</code>, <code>L''</code>).
+        <code>P''</code> may then contain <code>canonical: L'', breadcrumbs: [L, L']</code>
     </p>
 
     <p>
-        References to <a data-lt="P">P'</a> or <a data-lt="P">P''</a> might thus
-        be interpreted by a <a>PWP processor</a> to link back to the original <a>L</a>.
+        References to <code>P'</code> or <code>P''</code> might thus
+        be interpreted by a <a>PWP processor</a> to link back to the original <code>L</code>.
     </p>
 
 </section>
