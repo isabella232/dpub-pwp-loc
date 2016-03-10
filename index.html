@@ -154,9 +154,7 @@
             A <dfn>locator</dfn> is a URL that points to either an entire PWP or a resource within a PWP.
         </li>
     </ul>
-    <section class="note">
-        <p>To be more exact, a locator is always a resource locator. This resource part is implied, but omitted for brevity.</p>
-    </section>
+        <p class="note">To be more exact, a locator is always a resource locator. This resource part is implied, but omitted for brevity.</p>
     <ul>
         <li>
             A <dfn>PWP locator</dfn> is a <a>locator</a> to the PWP as a whole.
@@ -165,7 +163,7 @@
             As such, it is not the same as an identifier, although, it <em>could</em> be the same.
         </li>
     </ul>
-    <section class="note">
+    <div class="note">
         <p>
             The various states of a <a>PWP</a>, that may have their distinct <a data-lt="PWP Locator">PWP locators</a>,
             contain exactly the same abstract content, and should be the same in terms of structure.
@@ -178,7 +176,7 @@
         <p>
             Also, the possible packaging formats to pack a <a>PWP</a> is currently not defined, and is not required for this document.
         </p>
-    </section>
+    </div>
     <ul>
         <li>A <dfn>relative locator</dfn> is a locator to a resource within a <a>PWP</a>, without specifying the location of the <a>PWP</a>.</li>
         <li>An <dfn>absolute locator</dfn> is a combination of a <a>PWP locator</a> and a <a>relative locator</a>.</li>
@@ -188,11 +186,7 @@
             that does not depend on any arbitrary choices.
         </li>
     </ul>
-    <section class="note">
-        <p>These arbitrary choices are, in our case, packed vs unpacked.
-            Canonical absolute URL-s have the protocol built-in.
-            See the <a href="http://w3c.github.io/dpub-pwp/">current WD</a>.</p>
-    </section>
+    <p class="note">These arbitrary choices are, in our case, packed vs unpacked. Canonical absolute URL-s have the protocol built-in. See the <a href="http://w3c.github.io/dpub-pwp/">current WD</a>.</p>
     <ul>
         <li>
             The <dfn>canonical locator</dfn> is an absolute and state independent locator.
@@ -200,25 +194,41 @@
             This is pure conceptual, i.e., the <a>PWP</a> does not have to be published unpacked online.
         </li>
     </ul>
-    <section class="note">
-        <p>
-            There is no requirement that the <a>canonical locator</a> <em>must</em> be different from the locator of the published unpacked <a>PWP</a>.
-        </p>
-    </section>
+    <p class="note">
+        There is no requirement that the <a>canonical locator</a> <em>must</em> be different from the locator of the published unpacked <a>PWP</a>.
+    </p>
     <ul>
-        <li>
-            The <dfn>manifest</dfn> is in this document all metadata of a <a>PWP</a>.
-            This includes a list of all the spine items, the <a>canonical locator</a>, and all existing <a data-lt="PWP locator">PWP locators</a>.
-            The <a>manifest</a> should be made available when requesting any <a>PWP locator</a>.
+        <li>A <dfn data-lt="manifest|Manifest" >manifest</dfn> is a special resource containing fundamental information about the PWP. The syntax of a manifest is not defined in this document. A media type (see [[rfc6838]]) is also associated with a manifest (or a particular serialization thereof), that can be used when a particular instance is retrieved through standard HTTP(S) protocol. The <a>manifest</a> should be made available when requesting any <a>PWP locator and, conceptually, a complete manifest for a PWP should include values for <a>Lu</a> and <a>Lp</a>.</li>
+
+        <li>A <dfn>manifest item</dfn> is an information item within the <a>manifest</a> that can be retrieved by, e.g., a <a>PWP Processor</a>. Items may include a set of RDF triples, defining an RDF Graph, key-value pairs with atomic values like numbers, string literals, URL-s, etc., or keys associated with a collection of such atomic values.</li>
+
+        <li>A <dfn>single valued item</dfn> is a <a>manifest item</a> that is a key-value pair and with the value restricted to a <em>single</em> atomic value. The key for such am item is typically unique in general (and not only within a single manifest) and to be defined by a complete PWP specification.
+            <ul>
+                <li><a>Lu</a> and <a>Lp</a> are single valued items in a <a>manifest</a>. Their unique key, for the sake of this discussion, can be "Lu" and "Lp", respectively, and their values are the respective absolute URL-s.</li>
+                <li>A <a>PWP</a> specification has to define, in general, which manifest items are single valued</li>
+            </ul>
+        </li>
+
+        <li>The <dfn>combination of manifests</dfn>, denoted by the ⊕ operation (as in <strong>M</strong>&nbsp;=&nbsp; <strong>M<sub>1</sub></strong>&nbsp;⊕&nbsp;<strong>M<sub>2</sub></strong>) is the creation of a new <a>manifest</a>, consisting of <a data-lt="manifest item">manifest items</a> originating from <strong>M<sub>1</sub></strong> and <strong>M<sub>2</sub></strong>. The combination of manifest items depends on the type of items:
+            <ul>
+                <li>For the <code>g<sub>1</sub></code> and <code>g<sub>2</sub></code> RDF Graphs, contained in <strong>M<sub>1</sub></strong> and <strong>M<sub>2</sub></strong>, respectively, add the merge of the graphs to <strong>M</strong>, as defined in&nbsp;[[rdf11-concepts]] and in&nbsp;[[rdf11-mt]].</li>
+
+                <li>Combine the single valued items as follows:
+                    <ul>
+                        <li>For each single valued item <code>(k,v)</code> in <strong>M<sub>1</sub></strong> where there is no <code>(k,w)</code> pair in <strong>M<sub>2</sub></strong>, then add <code>(k,v)</code> to <strong>M</strong></li>
+                        <li>For each single valued item <code>(k,w)</code> in <strong>M<sub>2</sub></strong> add <code>(k,w)</code> to <strong>M</strong></li>
+                    </ul>
+                </li>
+
+                <li>For all other items, consider them in both <strong>M<sub>1</sub></strong> and <strong>M<sub>2</sub></strong>, merge values with identical keys by combining (or creating) collections, and add the result to <strong>M</strong></li>
+            </ul>
         </li>
     </ul>
-    <section class="note">
-        <p>
-            It must be emphasized that there is no requirement of having a one to one correspondence between the <a>manifest</a> as a conceptual entity and a specific file.
-            Elements of the <a>manifest</a> may be combined from different sources
-            (e.g., different manifest files, information conveyed through HTTP Responses, etc.),
-        </p>
-    </section>
+    <p class="note">
+        It must be emphasized that there is no requirement of having a one to one correspondence between the <a>manifest</a> as a conceptual entity and a specific file.
+        Elements of the <a>manifest</a> may be combined from different sources
+        (e.g., different manifest files, information conveyed through HTTP Responses, etc.),
+    </p>
 </section>
 
 <section id="problem">
@@ -241,23 +251,19 @@
             This is the <a>absolute locator</a> of the <a>PWP</a> in this state.
         </li>
     </ul>
-    <section class="note">
-        <p>
-            There may be other states, mostly similarly packed states but using a different archiving technology (e.g., <code>tar.gz</code>).
-            Their treatments are similar; we will not consider them in what follows because it does not change the various considerations.
-        </p>
-    </section>
+    <p class="note">
+        There may be other states, mostly similarly packed states but using a different archiving technology (e.g., <code>tar.gz</code>).
+        Their treatments are similar; we will not consider them in what follows because it does not change the various considerations.
+    </p>
     <p>
         The published <a>PWP</a> is assigned a <a>canonical locator</a>, e.g., the URL <code>https://example.org/published-books/1</code>.
         Reflecting the unpacked state in terms of (file) structure the <a>canonical locator</a> of the Mona Lisa image is <code>https://example.org/published-books/1/img/mona_lisa.jpg</code>.
     </p>
-    <section class="note">
-        <p>
-            As the example shows, the exact URL string of the <a>canonical locator</a> may be structurally different from the <a data-lt="PWP locator">PWP locators</a>, i.e.,
-            it is not necessarily a substring of one or the other.
-            The <a>canonical locator</a> <em>may</em> be identical to the <a>PWP locator</a> of the unpacked state, but not necessarily.
-        </p>
-    </section>
+    <p class="note">
+        As the example shows, the exact URL string of the <a>canonical locator</a> may be structurally different from the <a data-lt="PWP locator">PWP locators</a>, i.e.,
+        it is not necessarily a substring of one or the other.
+        The <a>canonical locator</a> <em>may</em> be identical to the <a>PWP locator</a> of the unpacked state, but not necessarily.
+    </p>
     <p>
         The translation, in practical terms, is that, whenever possible,
         the <a>canonical locator</a> should be used when referring to the published<a>PWP</a> in, e.g., annotations.
@@ -268,82 +274,138 @@
 <section id="pwp-processor">
     <h2>Functionalities of the <a>PWP processor</a></h2>
 
-    <p>See <a href="#fig-flow-get-l"></a> for the flow chart of when a <a>PWP processor</a> requests a published <a>PWP</a> (thus does a HTTP GET request on the <a>canonical locator</a>).</p>
+    <p>The functionalities of the processor can be divided into two steps:    </p>
+    <ol>
+        <li>finding, based on <a>L</a>, the right values of <a>Lp</a> and <a>Lu</a></li>
+        <li>extract, based on <a>Lp</a>, the exact locator for additional, internal resources</li>
+    </ol>
+    <section>
+        <h2>Algorithm to find the right values for <a>Lp</a> and <a>Lu</a></h2>
 
-    <section class="note">
-        <p>
+        <p>The goal of this algorithm, with respect to the problem area of <a>PWP</a> Locators, is to obtain the values of <a>Lu</a> and <a>Lp</a>, based on the value of <a>L</a>. This algorithm is performed by the <a>PWP Processor</a>, typically when it is initialized with the canonical locator <a>L</a> of a particular <a>PWP</a> instance. The core of the algorithm consists of retrieving these values based on the HTTP(S) responses on a <code>HTTP GET</code> request on <a>L</a>. Clearly, establishing the values of <a>Lu</a> and <a>Lp</a> are not the only action a PWP Process has to undertake as a result of that request; this algorithm should be considered as a specific building block within a larger set of processing steps that may include, for example, rendering of the PWP content. Those other steps are not considered at this section. In fact, the algorithm does more than just establishing the values of <a>Lu</a> and <a>Lp</a>. Instead, <em>the algorithm describes how to obtain the final </em>manifest<em> of a PWP</em>, which may contain a number of additional information (e.g., metadata, possible reading order of content, etc.) beyond the values of <a>Lu</a> and <a>Lp</a>.</p>
+
+        <p class="note">
             If the <a>PWP processor</a> already has the cached publication,
             than that will probably prevail (modulo cache state) and there may be no HTTP request in the first place.
             This section really refers to the situation of a first access.
         </p>
-    </section>
 
-    <figure id="fig-flow-get-l" class="overlarge">
-        <img src="drafts/PWPClient3.svg" alt="Flowchart of what happens when a Portable Web Publication is retrieved by the user"/>
-        <figcaption>Flowchart of what happens when a published <a>PWP</a> is retrieved by the user. (The image is available in <a href="drafts/PWPClient3.svg">SVG</a> or <a href="drafts/PWPClient3.png">PNG</a> formats.)</figcaption>
-    </figure>
+        <p>In what follows, as an abuse of notation, the <code>HTTP&nbsp;GET&nbsp;U</code>, for a URL <code>U</code>, refers to an <code>HTTP</code> or <code>HTTPS</code> request issued to the domain part of <code>U</code>, using the path from <code>U</code>. I.e., if <code>U</code> is <code>http://www.ex.org/a/b/c</code>, then <code>HTTP&nbsp;GET&nbsp;U</code> stands for:</p>
 
-        <p>
-            Please note that the HTTP GET on the <a>canonical locator</a>takes into account both the top and bottom part of the flow chart in parallel, i.e.,
-            there are multiple ways of trying to reconstruct the <a>manifest</a>.
-            These options that the <a>server</a> may use to return (a part of) the <a>manifest</a> include (but are not limited to):
-        </p>
+        <pre><code>GET /a/b/c HTTP/1.1
+            Host: www.ex.org
+            </code></pre>
 
-    <ul>
-        <li>an (X)HTML file containing the <code>&lt;link&gt;</code> element referring to (a part of) the <a>manifest</a>; or</li>
-        <li>an (X)HTML file (or maybe another type of resource) that has (a part of) the <a>manifest</a> embedded; or</li>
-        <li>the <a>manifest</a> as direct payload (serialized as a JSON file, RDFa+HTML file, etc.); or</li>
-        <li>a package in some predefined PWP format that must include (a part of) the <a>manifest</a>; or</li>
-        <li>an HTML, SVG, or other resource, with (a part of) the <a>manifest</a> provided through the Link header of the HTTP Response.</li>
-    </ul>
+        <p>See [[rfc2616]] for further details.</p>
 
-    <section class="note">
-        <p>It may be important to return, as part of the HTTP response, a distinctive media type for the serialization of the <a>manifest</a> as direct payload.</p>
-    </section>
+        <p>With these prerequisites, the algorithm is as follows (see also <a href="#fig-flow-get-l">the figure</a> as a visual aid to the algorithm):</p>
 
-    <section class="note">
-        <p>
-            These possibilities are not mutually exclusive.
-            Each returned information, by itself, may be incomplete (hence the remark 'part thereof')
-            and a combination of those, or other possibilities
-            may provide the complete <a>manifest</a>.
-            Moreover, all these manifest-parts could be different, overlap, or have different information.
-        </p>
-    </section>
+        <ol class="algorithm">
+            <li>The input to the algorithm is the canonical locator of the <a>PWP</a> instance, <a>L</a>.</li>
 
-    <section class="issue" data-number="6" title="What is the relative priority of various manifests?">
-    </section>
+            <li>Create two, initially empty, <a data-lt="manifest">manifests</a>, respectively <strong>M<sub>2</sub></strong> and <strong>M<sub>3</sub></strong>.</li>
 
-    <p>
-        The full <a>manifest</a> is constructed using multiple options.
-        In the end, the <a>manifest</a> should consists of all metadata to render the published <a>PWP</a>,
-        but also all available <a data-lt="PWP locator">PWP locators</a> on the <a>server</a>.
+            <li>Issue an <code>HTTP&nbsp;GET&nbsp;L</code> request.</li>
+
+            <li>If the response is not successful (e.g., the response code is a 404), the process fails with no results.</li>
+
+            <li>Otherwise, perform the two, independent processing steps below, yielding possibly new values to <strong>M<sub>2</sub></strong> and <strong>M<sub>3</sub></strong>, respectively.
+
+                <ol>
+                    <li>Consider the resource returned by the <code>HTTP</code> request to, possibly, provide a new value to <strong>M<sub>2</sub></strong> as follows.
+                        <ol>
+                            <li>Depending on the media type of the response, take the following actions
+                                <ol>
+                                    <li>If the response is a packaged PWP instance (identified via the media type to be specified for the packed state of a PWP)
+                                        <ol>
+                                            <li>Unpack the package, and retrieve the <a>manifest</a> embedded in the package as (to be) specified by the packed state of a PWP.</li>
+                                            <li><strong>M<sub>2</sub></strong> is set to the retrieved manifest.</li>
+                                        </ol>
+                                    </li>
+                                    <li>Otherwise, if the resource is a PWP <a>manifest</a>, identified by its media type, set <strong>M<sub>2</sub></strong> to this resource</li>
+                                    <li>Otherwise the resource is an HTML file. Take the following actions:
+                                        <ol>
+                                            <li>Create two, initially empty, <a data-lt="manifest">manifests</a>, respectively <strong>M<sub>1,0</sub></strong> and <strong>M<sub>1,1</sub></strong></li>
+                                            <li>Perform the two, independent processing steps below, yielding possibly new values to <strong>M<sub>1,0</sub></strong> and <strong>M<sub>1,1</sub></strong>, respectively.
+                                                <ol>
+                                                    <li>If the HTML content includes a <code>&lt;link&nbsp;rel="pwp_manifest"&nbsp;href="URI&gt;</code> in the header:
+                                                        <ol>
+                                                            <li>Issue a <code>HTTP&nbsp;GET&nbsp;URI</code></li>
+                                                            <li>If the response is successful, <strong>M<sub>1,0</sub></strong> is set to the content returned in the response</li>
+                                                        </ol>
+                                                    </li>
+                                                    <li>If the HTML content includes a <a>manifest</a> content in a <code>&lt;script&gt;</code> element, serialized according to one of the accepted serializations for PWP manifests
+                                                        <ol>
+                                                            <li>Retrieve and parse the content of the <code>&lt;script&gt;</code> element</li>
+                                                            <li>If parsing is successful, <strong>M<sub>1,1</sub></strong> is set to the parsed manifest</li>
+                                                        </ol>
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                            <li>Set <strong>M<sub>2</sub></strong>&nbsp;=&nbsp;<strong>M<sub>1,0</sub></strong>&nbsp;⊕&nbsp;<strong>M<sub>1,1</sub></strong></li>
+                                        </ol>
+                                    </li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </li>
+                    <li>Consider the HTTP Response header to, possibly, provide a new value to <strong>M3</strong> as follows.
+                        <ol>
+                            <li>If the response header includes a header of the form <code>LINK&nbsp;&lt;URI&gt;;&nbsp;rel="pwp_manifest"</code> (see [[rfc5988]]) then
+                                <ol>
+                                    <li>Issue an <code>HTTP&nbsp;GET&nbsp;URI</code></li>
+                                    <li>If the response is successful, <strong>M<sub>3</sub></strong> is set to the content returned in the response.</li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </li>
+            <li>The final <a>manifest</a> is <strong>M</strong>&nbsp;=&nbsp;<strong>M<sub>2</sub></strong>&nbsp;⊕&nbsp;<strong>M<sub>3</sub></strong>.</li>
+            <li>Retrieve the values of <a>Lp</a> and <a>Lu</a> from <strong>M</strong>.</li>
+        </ol>
+
+        <ul class="note">
+            <li>An important point of the algorithm is that it implicitly provides a priority as for the values of <a>Lu</a> and <a>Lp</a> in case several <a>manifest</a> instances contains values for these. Indeed, both <a>Lu</a> and <a>Lp</a> are specified as <a data-lt="single valued item">single valued items</a>. This means that values in, for example, <strong>M<sub>3</sub></strong> will have a higher priority than values provided through  <strong>M<sub>2</sub></strong> (see the the definition for the <a>combination of manifests</a> for more details).</li>
+
+            <li>The definition of the algorithm considers only HTML as a possible non-packaged and non-manifest response format. It may become possible to allow, for example, SVG to be returns as such a resource; this will depend on the final specification of a PWP. The algorithm should be then adapted accordingly by adding a relevant branch (e.g., an SVG file may include a <code>&lt;script&gt;</code> element to embed a manifest, but does not have a <code>&lt;link&gt;</code> element).</li>
+
+            <li>It may become possible for HTML file to includes several <code>&lt;link&gt;</code> elements. If that becomes allowed by a PWP specification the corresponding step could be modified by taking all link elements into account, and sequentially combining the manifest files in document order. The same note is valid for (possible) several <code>&lt;script&gt;</code> elements.</li>
+
+            <li>The definition of the algorithm considers only one possible package format, i.e., one possible media type for a packed state. Obviously, if a PWP specification allows for several different package formats, each of those should be considered. However, conceptually, the action to be taken is identical for each of those.</li>
+            <li>Similarly, if a PWP specification allows for several different serialization syntaxes for manifests, the processor should be able to recognize and parse them accordingly. The expectation is that the various possible serializations serialize the <em>same</em> content, i.e., these do not influence the final result.</li>
+
+            <li>The algorithm makes use of the constant <code>pwp_manifest</code>; the exact value of these constants must be defined through a more precise specification of PWP-s. It is used here for illustrative purpose only.</li>
+
+            <li>The PWP Processor MAY include an <code>Accept</code> header (see [[rfc7231]]) when issuing a <code>HTTP GET</code> to express its preference for, e.g., a packed state of a PWP over manifest payload, or in favor of a particular serialization of the manifest content. Whether this is done or not, and whether the server honors this preference, does not influence the algorithm.</li>
+        </ul>
+
+
+        <figure id="fig-flow-get-l" class="overlarge">
+            <img src="drafts/PWPClient3.svg" alt="Flowchart of what happens when a Portable Web Publication is retrieved by the user"/>
+            <figcaption>Flowchart of what happens when a published <a>PWP</a> is retrieved by the user. (The image is also available in <a href="drafts/PWPClient3.svg">SVG</a> or <a href="drafts/PWPClient3.png">PNG</a> formats.)</figcaption>
+        </figure>
+
+        <p class="issue" data-number="6" title="What is the relative priority of various manifests?">
+
     </p>
-
-    <p>
-        Once the full <a>manifest</a> is constructed, the published <a>PWP</a> can be retrieved, or a resource within that <a>PWP</a> can be retrieved.
-        Based on the <a>canonical locator</a>, the <a>PWP processor</a> can derive a <a>relative locator</a> for the image, i.e., <code>img/mona_lisa.jpg</code>.
-    </p>
-
-    <p>
-        Then, the <a>PWP processor</a> can access the image:
-        </p>
-    <ul>
-        <li>
-            If the preferred state is the packed one, then the <a>PWP locator</a> of the packed state is accessed, unpacked,
-            and the image is localized within the unpacked content
-            (and that usually means using the <a>relative locator</a> as some sort of a file system path within that unpacked content).
-        </li>
-        <li>
-            If the preferred state is the unpacked one, then the locator of the image is constructed by using the <a>PWP locator</a> of the unpacked state and the <a>relative locator</a>,
-            yielding <code>https://example.org/books/1/img/mona_lisa.jpg</code>.
-        </li>
-    </ul>
-
-    <section class="note">
+    </section>
+    <section>
+        <h2>Access internal resources</h2>
         <p>
-            There may be “smarter” <a data-lt="PWP processor">PWP Processors</a> that make use of local facilities like caching,
-            but those do not modify these conceptual approaches.
+            Once the full <a>manifest</a> is constructed, the published <a>PWP</a> can be retrieved, or a resource within that <a>PWP</a> can be retrieved. Based on the <a>canonical locator</a>, the <a>PWP processor</a> can derive a <a>relative locator</a> for the image, i.e., <code>img/mona_lisa.jpg</code>. Then, the <a>PWP processor</a> can access the image:</p>
+        <ul>
+            <li>
+                If the preferred state is the packed one, then the <a>PWP locator</a> of the packed state is accessed, unpacked, and the image is localized within the unpacked content (and that usually means using the <a>relative locator</a> as some sort of a file system path within that unpacked content).
+            </li>
+            <li>
+                If the preferred state is the unpacked one, then the locator of the image is constructed by using the <a>PWP locator</a> of the unpacked state and the <a>relative locator</a>,
+                yielding <code>https://example.org/books/1/img/mona_lisa.jpg</code>.
+            </li>
+        </ul>
+
+        <p class="note">
+            There may be “smarter” <a data-lt="PWP processor">PWP Processors</a> that make use of local facilities like caching, but those do not modify these conceptual approaches.
         </p>
     </section>
 
@@ -357,27 +419,25 @@
         and a resource is requested, the question is how does this resource get to the end-user.
     </p>
 
-    <section class="issue" data-number="9" title="How to fetch a resource from within a PWP?">
-    </section>
+    <div class="issue" data-number="9" title="How to fetch a resource from within a PWP?">
+    </div>
 
 </section>
 
 <section id="local-pwp">
     <h2>Local (downloaded) PWPs</h2>
 
-    <section class="issue" data-number="10" title="What to do with a locally downloaded PWP?">
-    </section>
+    <div class="issue" data-number="10" title="What to do with a locally downloaded PWP?">
+    </div>
 
-    <section class="issue" data-number="11" title="What to do with a PWP that is published nowhere, i.e., are created locally?">
-    </section>
+    <div class="issue" data-number="11" title="What to do with a PWP that is published nowhere, i.e., are created locally?">
+    </div>
 </section>
 
 <section id="breadcrumbs">
     <h2>Breadcrumbs</h2>
 
-    <section class="issue">
-        <p>To be discussed.</p>
-    </section>
+    <p class="issue">To be discussed.</p>
 
     <p>
         When I download a <a>PWP</a> (for this example denoted as <code>P</code>, with <a>canonical locator</a> <code>L</code>),
