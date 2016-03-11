@@ -135,7 +135,7 @@
 <section>
     <h2>Definitions</h2>
     <ul>
-        <li>A Portable Web Document (<dfn>PWP</dfn>) is defined in a separate document [[pwp]]</a>. That document also defined the <dfn data-lt="state|states">states</dfn> a PWP can be in.</li>
+        <li>A Portable Web Document (<dfn>PWP</dfn>) is defined in a separate document [[pwp]]</a>. That document also defined the <dfn data-lt="state">states</dfn> a PWP can be in.</li>
 
         <li>A <dfn>reading system</dfn> has the responsibility of the rendering the contents of a <a>PWP</a>.</li>
 
@@ -168,7 +168,7 @@
 
         <li>A <dfn>relative locator</dfn> is a locator to a resource within a <a>PWP</a>, without specifying the location of the <a>PWP</a>.</li>
 
-        <li>An <dfn data-lt="absolute locator">absolute locator</dfn> is a combination of a <a>PWP locator</a> and a <a>relative locator</a>.</li>
+        <li>An <dfn>absolute locator</dfn> is a combination of a <a>PWP locator</a> and a <a>relative locator</a>.</li>
 
         <li>The term <dfn>canonical</dfn> is defined in the <a href="https://en.wiktionary.org/wiki/canonical">mathematical sense</a>: distinguished among entities of its kind, so that it can be picked out in a way that does not depend on any arbitrary choices.
         </li>
@@ -188,7 +188,7 @@
             </p>
         </li>
 
-        <li>A <dfn data-lt="manifest|Manifest|manifest file" >manifest (file)</dfn> is a special resource containing fundamental information about a PWP. The serialization syntax and the content of a manifest is not defined in this document. A media type (see [[rfc6838]]) is also associated with a manifest (or a particular serialization thereof), that can be used when a particular instance is retrieved through standard HTTP(S) protocol.</li>
+        <li>A <dfn data-lt="manifest|manifest file" >manifest (file)</dfn> is a special resource containing fundamental information about a PWP. The serialization syntax and the content of a manifest is not defined in this document. A media type (see [[rfc6838]]) is also associated with a manifest (or a particular serialization thereof), that can be used when a particular instance is retrieved through standard HTTP(S) protocol.</li>
 
         <li>A <dfn data-lt="manifest item|manifest items">manifest item</dfn> is an information item within the <a>manifest file</a> that can be retrieved by, e.g., a <a>PWP Processor</a>. These may include metadata, information on rendering order and rendition, etc. For the purpose of this document it is important that <strong>L<sub>u</sub></strong> and <strong>L<sub>p</sub></strong> are such manifest items, i.e., they can be part of a <a>manifest</a>.</li>
 
@@ -251,13 +251,14 @@
 
     <p>The functionalities of the processor can be divided into two steps:    </p>
     <ol>
-        <li>finding, based on <a>L</a>, the right values of <a>Lp</a> and <a>Lu</a></li>
-        <li>extract, based on <a>Lp</a>, the exact locator for additional, internal resources</li>
+        <li>finding, based on <strong>L</strong>, the right values of <strong>L<sub>p</sub></strong> and <strong>L<sub>u</sub></strong></li>
+        <li>extract, based on <strong>L<sub>p</sub></strong>, the exact locator for additional, internal resources</li>
     </ol>
     <section>
-        <h2>Algorithm to find the right values for <a>Lp</a> and <a>Lu</a></h2>
+        <h2>Algorithm to find the right values for <strong>L<sub>p</sub></strong> and <strong>L<sub>u</sub></strong></h2>
 
-        <p>The goal of this algorithm, with respect to the problem area of <a>PWP</a> Locators, is to obtain the values of <a>Lu</a> and <a>Lp</a>, based on the value of <a>L</a>. This algorithm is performed by the <a>PWP Processor</a>, typically when it is initialized with the canonical locator <a>L</a> of a particular <a>PWP</a> instance. The core of the algorithm consists of retrieving these values based on the HTTP(S) responses on a <code>HTTP GET</code> request on <a>L</a>. Clearly, establishing the values of <a>Lu</a> and <a>Lp</a> are not the only action a PWP Process has to undertake as a result of that request; this algorithm should be considered as a specific building block within a larger set of processing steps that may include, for example, rendering of the PWP content. Those other steps are not considered at this section. In fact, the algorithm does more than just establishing the values of <a>Lu</a> and <a>Lp</a>. Instead, <em>the algorithm describes how to obtain the final </em>manifest<em> of a PWP</em>, which may contain a number of additional information (e.g., metadata, possible reading order of content, etc.) beyond the values of <a>Lu</a> and <a>Lp</a>.</p>
+        <p>The goal of this algorithm, with respect to the problem area of <a>PWP</a> Locators, is to obtain the values of <strong>L<sub>u</sub></strong> and <strong>L<sub>p</sub></strong>, based on the value of <strong>L</strong>. This algorithm is performed by the <a>PWP Processor</a>, typically when it is initialized with the canonical locator <strong>L</strong> of a particular <a>PWP</a> instance. The core of the algorithm consists of retrieving these values based on the HTTP(S) responses on a <code>HTTP GET</code> request on <strong>L</strong>. Clearly, establishing the values of <strong>L<sub>u</sub></strong> and <strong>L<sub>p</sub></strong> are not the only action a PWP Process has to undertake as a result of that request; this algorithm should be considered as a specific building block within a larger set of processing steps that may include, for example, rendering of the <a>PWP</a> content. </p>
+        <p>In fact, the algorithm does more than just establishing the values of <strong>L<sub>u</sub></strong> and <strong>L<sub>p</sub></strong>. Instead, <em>the algorithm describes how to obtain the <a>PWP manifest</a></em>, which may contain a number of additional information (e.g., metadata, possible reading order of content, etc.) beyond the values of <strong>L<sub>u</sub></strong> and <strong>L<sub>p</sub></strong>.</p>
 
         <p class="note">
             If the <a>PWP processor</a> already has the cached publication,
@@ -265,61 +266,59 @@
             This section really refers to the situation of a first access.
         </p>
 
-        <p>In what follows, as an abuse of notation, the <code>HTTP&nbsp;GET&nbsp;U</code>, for a URL <code>U</code>, refers to an <code>HTTP</code> or <code>HTTPS</code> request issued to the domain part of <code>U</code>, using the path from <code>U</code>. I.e., if <code>U</code> is <code>http://www.ex.org/a/b/c</code>, then <code>HTTP&nbsp;GET&nbsp;U</code> stands for:</p>
+        <p>In what follows, as an abuse of notation, <code>HTTP&nbsp;GET&nbsp;U</code>, for a URL <code>U</code>, refers to an <code>HTTP</code> or <code>HTTPS</code> request issued to the domain part of <code>U</code>, using the path from <code>U</code>. I.e., if <code>U</code> is <code>http://www.ex.org/a/b/c</code>, then <code>HTTP&nbsp;GET&nbsp;U</code> stands for:</p>
 
         <pre><code>GET /a/b/c HTTP/1.1
-            Host: www.ex.org
-            </code></pre>
+Host: www.ex.org</code></pre>
 
         <p>See [[rfc2616]] for further details.</p>
 
-        <p>With these prerequisites, the algorithm is as follows (see also <a href="#fig-flow-get-l">the figure</a> as a visual aid to the algorithm):</p>
+        <p>As another abuse of notation, the algorithm refers to a <a>manifest</a> retrieved <code>HTTP</code> and then manipulated via, e.g., the <a>combination of manifests</a>; that step, in fact, involves parsing the serialized <a data-lt="manifest">manifest file</a> and manipulate the abstract content instead in an implementation specific way.</p>
+
+        <p>With these prerequisites, the algorithm is as follows (see also <a href="#fig-flow-get-l">the figure</a> as a visual aid to the algorithm). The input to the algorithm is the <a>canonical locator</a> of the <a>PWP</a> instance, <strong>L</strong>.</p>
 
         <ol class="algorithm">
-            <li>The input to the algorithm is the canonical locator of the <a>PWP</a> instance, <a>L</a>.</li>
-
-            <li>Create two, initially empty, <a data-lt="manifest">manifests</a>, respectively <strong>M<sub>2</sub></strong> and <strong>M<sub>3</sub></strong>.</li>
+            <li>Create two, initially empty, <a data-lt="manifest">manifests</a>, denoted respectively <strong>M<sub>2</sub></strong> and <strong>M<sub>3</sub></strong>.</li>
 
             <li>Issue an <code>HTTP&nbsp;GET&nbsp;L</code> request.</li>
 
             <li>If the response is not successful (e.g., the response code is a 404), the process fails with no results.</li>
 
             <li>Otherwise, perform the two, independent processing steps below, yielding possibly new values to <strong>M<sub>2</sub></strong> and <strong>M<sub>3</sub></strong>, respectively.
-
                 <ol>
-                    <li>Consider the resource returned by the <code>HTTP</code> request to, possibly, provide a new value to <strong>M<sub>2</sub></strong> as follows.
+                    <li>Consider the resource returned by the <code>HTTP</code> request to, possibly, provide a new value to <strong>M<sub>2</sub></strong> as follows. Depending on the media type of the response, take the following actions:
                         <ol>
-                            <li>Depending on the media type of the response, take the following actions
+                            <li>If the response is a packaged PWP instance (identified via the media type to be specified for the packed <a>state</a> of a PWP):
                                 <ol>
-                                    <li>If the response is a packaged PWP instance (identified via the media type to be specified for the packed state of a PWP)
+                                    <li>Unpack the package, and retrieve the <a>manifest</a> embedded in the package as (to be) specified by the packed state of a PWP.</li>
+                                    <li><strong>M<sub>2</sub></strong> is set to the retrieved manifest.</li>
+                                </ol>
+                            </li>
+
+                            <li>Otherwise, if the resource is a PWP <a>manifest</a>, as identified by its media type, set <strong>M<sub>2</sub></strong> to this resource.</li>
+
+                            <li>Otherwise the resource is an HTML file. Take the following actions:
+                                <ol>
+                                    <li>Create two, initially empty, <a data-lt="manifest">manifests</a>, respectively <strong>M<sub>1,0</sub></strong> and <strong>M<sub>1,1</sub></strong></li>
+
+                                    <li>Perform the two, independent processing steps below, yielding possibly new values to <strong>M<sub>1,0</sub></strong> and <strong>M<sub>1,1</sub></strong>, respectively.
                                         <ol>
-                                            <li>Unpack the package, and retrieve the <a>manifest</a> embedded in the package as (to be) specified by the packed state of a PWP.</li>
-                                            <li><strong>M<sub>2</sub></strong> is set to the retrieved manifest.</li>
-                                        </ol>
-                                    </li>
-                                    <li>Otherwise, if the resource is a PWP <a>manifest</a>, identified by its media type, set <strong>M<sub>2</sub></strong> to this resource</li>
-                                    <li>Otherwise the resource is an HTML file. Take the following actions:
-                                        <ol>
-                                            <li>Create two, initially empty, <a data-lt="manifest">manifests</a>, respectively <strong>M<sub>1,0</sub></strong> and <strong>M<sub>1,1</sub></strong></li>
-                                            <li>Perform the two, independent processing steps below, yielding possibly new values to <strong>M<sub>1,0</sub></strong> and <strong>M<sub>1,1</sub></strong>, respectively.
+                                            <li>If the HTML content includes a <code>&lt;link&nbsp;rel="pwp_manifest"&nbsp;href="URI&gt;</code> in the header:
                                                 <ol>
-                                                    <li>If the HTML content includes a <code>&lt;link&nbsp;rel="pwp_manifest"&nbsp;href="URI&gt;</code> in the header:
-                                                        <ol>
-                                                            <li>Issue a <code>HTTP&nbsp;GET&nbsp;URI</code></li>
-                                                            <li>If the response is successful, <strong>M<sub>1,0</sub></strong> is set to the content returned in the response</li>
-                                                        </ol>
-                                                    </li>
-                                                    <li>If the HTML content includes a <a>manifest</a> content in a <code>&lt;script&gt;</code> element, serialized according to one of the accepted serializations for PWP manifests
-                                                        <ol>
-                                                            <li>Retrieve and parse the content of the <code>&lt;script&gt;</code> element</li>
-                                                            <li>If parsing is successful, <strong>M<sub>1,1</sub></strong> is set to the parsed manifest</li>
-                                                        </ol>
-                                                    </li>
+                                                    <li>Issue a <code>HTTP&nbsp;GET&nbsp;URI</code> request</li>
+                                                    <li>If the response is successful, <strong>M<sub>1,0</sub></strong> is set to the content returned in the response</li>
                                                 </ol>
                                             </li>
-                                            <li>Set <strong>M<sub>2</sub></strong>&nbsp;=&nbsp;<strong>M<sub>1,0</sub></strong>&nbsp;⊕&nbsp;<strong>M<sub>1,1</sub></strong></li>
+
+                                            <li>If the HTML content includes a <a>manifest</a> content embedded in a <code>&lt;script&gt;</code> element, serialized in to one of the accepted serializations for PWP manifests
+                                                <ol>
+                                                    <li>Retrieve and parse the content of the <code>&lt;script&gt;</code> element</li>
+                                                    <li>If parsing is successful, <strong>M<sub>1,1</sub></strong> is set to the parsed manifest</li>
+                                                </ol>
+                                            </li>
                                         </ol>
                                     </li>
+                                    <li>Set <strong>M<sub>2</sub></strong>&nbsp;=&nbsp;<strong>M<sub>1,0</sub></strong>&nbsp;⊕&nbsp;<strong>M<sub>1,1</sub></strong></li>
                                 </ol>
                             </li>
                         </ol>
@@ -328,7 +327,7 @@
                         <ol>
                             <li>If the response header includes a header of the form <code>LINK&nbsp;&lt;URI&gt;;&nbsp;rel="pwp_manifest"</code> (see [[rfc5988]]) then
                                 <ol>
-                                    <li>Issue an <code>HTTP&nbsp;GET&nbsp;URI</code></li>
+                                    <li>Issue an <code>HTTP&nbsp;GET&nbsp;URI</code> request</li>
                                     <li>If the response is successful, <strong>M<sub>3</sub></strong> is set to the content returned in the response.</li>
                                 </ol>
                             </li>
@@ -336,23 +335,23 @@
                     </li>
                 </ol>
             </li>
-            <li>The final <a>manifest</a> is <strong>M</strong>&nbsp;=&nbsp;<strong>M<sub>2</sub></strong>&nbsp;⊕&nbsp;<strong>M<sub>3</sub></strong>.</li>
-            <li>Retrieve the values of <a>Lp</a> and <a>Lu</a> from <strong>M</strong>.</li>
+            <li>The final <a>PWP manifest</a> is set to <strong>M</strong>&nbsp;=&nbsp;<strong>M<sub>2</sub></strong>&nbsp;⊕&nbsp;<strong>M<sub>3</sub></strong>.</li>
+
+            <li>Retrieve the values of <strong>L<sub>p</sub></strong> and <strong>L<sub>u</sub></strong> from <strong>M</strong>.</li>
         </ol>
 
         <ul class="note">
-            <li>An important point of the algorithm is that it implicitly provides a priority as for the values of <a>Lu</a> and <a>Lp</a> in case several <a>manifest</a> instances contains values for these. Indeed, both <a>Lu</a> and <a>Lp</a> are specified as <a data-lt="single valued item">single valued items</a>. This means that values in, for example, <strong>M<sub>3</sub></strong> will have a higher priority than values provided through  <strong>M<sub>2</sub></strong> (see the the definition for the <a>combination of manifests</a> for more details).</li>
+            <li>An important point of the algorithm is that it implicitly provides a priority for the values of <strong>L<sub>u</sub></strong> and <strong>L<sub>p</sub></strong> in case several <a>manifest</a> instances contains values for these; see the defintion for the <a>combination of manifests</a>.</li>
 
-            <li>The definition of the algorithm considers only HTML as a possible non-packaged and non-manifest response format. It may become possible to allow, for example, SVG to be returns as such a resource; this will depend on the final specification of a PWP. The algorithm should be then adapted accordingly by adding a relevant branch (e.g., an SVG file may include a <code>&lt;script&gt;</code> element to embed a manifest, but does not have a <code>&lt;link&gt;</code> element).</li>
+            <li>The definition of the algorithm considers only HTML as a possible non-packaged and non-manifest response format. It may become possible to allow, for example, SVG as another, possible format for a <a>PWP</a>; this depends on the final specification of a PWP. The algorithm should then be adapted accordingly by adding a relevant branch (e.g., the specification of SVG includes <code>&lt;script&gt;</code> element that can be used to embed a manifest, but does not have a <code>&lt;link&gt;</code> element).</li>
 
-            <li>It may become possible for HTML file to includes several <code>&lt;link&gt;</code> elements. If that becomes allowed by a PWP specification the corresponding step could be modified by taking all link elements into account, and sequentially combining the manifest files in document order. The same note is valid for (possible) several <code>&lt;script&gt;</code> elements.</li>
+            <li>It may become possible for HTML file to includes several <code>&lt;link&gt;</code> elements referring to a <a>manifest</a> each. If that becomes allowed by a PWP specification, the corresponding step could be modified by taking all link elements into account, and sequentially combining the manifest files in document order to yield <strong>M<sub>1,0</sub></strong>. The same note is valid for (possible) several <code>&lt;script&gt;</code> elements and <strong>M<sub>1,1</sub></strong>, respectively.</li>
 
-            <li>The definition of the algorithm considers only one possible package format, i.e., one possible media type for a packed state. Obviously, if a PWP specification allows for several different package formats, each of those should be considered. However, conceptually, the action to be taken is identical for each of those.</li>
-            <li>Similarly, if a PWP specification allows for several different serialization syntaxes for manifests, the processor should be able to recognize and parse them accordingly. The expectation is that the various possible serializations serialize the <em>same</em> content, i.e., these do not influence the final result.</li>
+            <li>Similarly, if a PWP specification allows for several different serialization syntaxes for manifests, the processor should be able to recognize and parse them accordingly. The expectation is that the various possible serializations MUST serialize the <em>same</em> content, i.e., these do not influence the final result.</li>
 
-            <li>The algorithm makes use of the constant <code>pwp_manifest</code>; the exact value of these constants must be defined through a more precise specification of PWP-s. It is used here for illustrative purpose only.</li>
+            <li>The algorithm makes use of the constant <code>pwp_manifest</code>; the exact value of this constant must be defined, and registered, through a more precise specification of PWP-s. It is used here for illustrative purpose only.</li>
 
-            <li>The PWP Processor MAY include an <code>Accept</code> header (see [[rfc7231]]) when issuing a <code>HTTP GET</code> to express its preference for, e.g., a packed state of a PWP over manifest payload, or in favor of a particular serialization of the manifest content. Whether this is done or not, and whether the server honors this preference, does not influence the algorithm.</li>
+            <li>The PWP Processor MAY include an <code>Accept</code> header (see [[rfc7231]]) when issuing a <code>HTTP GET</code> to express its preference for, e.g., a packed state of a PWP over manifest payload, or in favor of a particular serialization of the manifest content. Whether this is done or not, and whether the server honors this preference, does not influence the details of the algorithm.</li>
         </ul>
 
 
