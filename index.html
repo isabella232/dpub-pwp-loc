@@ -194,13 +194,13 @@
 
         <li>A <dfn>PWP manifest</dfn> or <dfn>complete manifest</dfn> is a <a>manifest</a> that contains <em>all</em> <a>manifest items</a> that are required by a <a>PWP processor</a>. The complete list of required items are not defined here; for the purpose of this document it suffices to state that <strong>L</strong>, <strong>L<sub>u</sub></strong>, and <strong>L<sub>p</sub></strong> MUST be part of a <a>PWP manifest</a> if those <a data-lt="state">states</a> are indeed available on the <a>server</a>.</li>
 
-        <li>The <dfn>combination of manifests</dfn>, denoted by the ⊕ operation (as in <strong>M</strong>&nbsp;=&nbsp; <strong>M<sub>1</sub></strong>&nbsp;⊕&nbsp;<strong>M<sub>2</sub></strong>) is the creation of a new <a>manifest</a>, consisting of <a data-lt="manifest item">manifest items</a> originating from <strong>M<sub>1</sub></strong> and <strong>M<sub>2</sub></strong>.
+        <li>The <dfn>combination of manifests</dfn>, denoted by the ⊕ operation (as in <strong>M</strong>&nbsp;=&nbsp; <strong>M<sub>a</sub></strong>&nbsp;⊕&nbsp;<strong>M<sub>b</sub></strong>) is the creation of a new <a>manifest</a>, consisting of <a data-lt="manifest item">manifest items</a> originating from <strong>M<sub>a</sub></strong> and <strong>M<sub>b</sub></strong>.
 
             <p>The precise definition of a <a>manifest</a> should also specify how different <a>manifest items</a> are combined during this operation. For the purpose of this document it is only required, that:</p>
             <ul>
-                <li>the value of <strong>L</strong> MUST be identical, if present, in both <strong>M<sub>1</sub></strong> and <strong>M<sub>2</sub></strong>; and</li>
+                <li>the value of <strong>L</strong> MUST be identical, if present, in both <strong>M<sub>a</sub></strong> and <strong>M<sub>b</sub></strong>; and</li>
 
-                <li>the value of <strong>L<sub>u</sub></strong> (resp. <strong>L<sub>p</sub></strong>) in <strong>M<sub>2</sub></strong> MUST have a higher priority. I.e., if present in <strong>M<sub>2</sub></strong>, this is the value added to <strong>M</strong>, regardless of whether a similar value is also specified in <strong>M<sub>1</sub></strong> or not.</li>
+                <li>the value of <strong>L<sub>u</sub></strong> (resp. <strong>L<sub>p</sub></strong>) in <strong>M<sub>b</sub></strong> MUST have a higher priority. I.e., if present in <strong>M<sub>b</sub></strong>, this is the value added to <strong>M</strong>, regardless of whether a similar value is also specified in <strong>M<sub>a</sub></strong> or not.</li>
             </ul>
         </li>
     </ul>
@@ -340,8 +340,22 @@ Host: www.ex.org</code></pre>
             <li>Retrieve the values of <strong>L<sub>p</sub></strong> and <strong>L<sub>u</sub></strong> from <strong>M</strong>.</li>
         </ol>
 
+        <p>An important point of the algorithm is that it defins a priority for the values of <strong>L<sub>u</sub></strong> and <strong>L<sub>p</sub></strong> in case several <a>manifest</a> instances contains values for these (see the definition for the <a>combination of manifests</a>). At present, the priority  is as follows, in decreasing priority order:</p>
+
+        <ol>
+            <li>Manifest referred to by the <code>HTTP</code> Link Header</li>
+            <li>Manifest extracted from the payload; if that means retrieving the manifest from the HTML content, then:
+                <ol>
+                    <li>Manifest embedded in the HTML</li>
+                    <li>Manifest referred to by a <code>&lt;link&gt;</code> element.</li>
+                </ol>
+                <p>otherwise the access to the manifest via a package or directly through the payload are mutually exclusive, i.e., priority among them do not apply</p>
+            </li>
+        </ol>
+
+        <p class="issue" data-number="6" title="What is the relative priority of various manifests?">
+
         <ul class="note">
-            <li>An important point of the algorithm is that it implicitly provides a priority for the values of <strong>L<sub>u</sub></strong> and <strong>L<sub>p</sub></strong> in case several <a>manifest</a> instances contains values for these; see the defintion for the <a>combination of manifests</a>.</li>
 
             <li>The definition of the algorithm considers only HTML as a possible non-packaged and non-manifest response format. It may become possible to allow, for example, SVG as another, possible format for a <a>PWP</a>; this depends on the final specification of a PWP. The algorithm should then be adapted accordingly by adding a relevant branch (e.g., the specification of SVG includes <code>&lt;script&gt;</code> element that can be used to embed a manifest, but does not have a <code>&lt;link&gt;</code> element).</li>
 
@@ -360,7 +374,6 @@ Host: www.ex.org</code></pre>
             <figcaption>Visual representation of the <a href="#algorithm">algorithm</a> to retrieve the <a>PWP manifest</a>. The figure is also available in <a href="figures/PWPClient.png">PNG</a> format.</figcaption>
         </figure>
 
-        <p class="issue" data-number="6" title="What is the relative priority of various manifests?">
     </p>
     </section>
     <section>
