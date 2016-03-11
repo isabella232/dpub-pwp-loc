@@ -277,7 +277,7 @@ Host: www.ex.org</code></pre>
 
         <p>With these prerequisites, the algorithm is as follows (see also <a href="#fig-flow-get-l">the figure</a> as a visual aid to the algorithm). The input to the algorithm is the <a>canonical locator</a> of the <a>PWP</a> instance, <strong>L</strong>.</p>
 
-        <ol class="algorithm">
+        <ol class="algorithm" id="algorithm">
             <li>Create two, initially empty, <a data-lt="manifest">manifests</a>, denoted respectively <strong>M<sub>2</sub></strong> and <strong>M<sub>3</sub></strong>.</li>
 
             <li>Issue an <code>HTTP&nbsp;GET&nbsp;L</code> request.</li>
@@ -356,12 +356,11 @@ Host: www.ex.org</code></pre>
 
 
         <figure id="fig-flow-get-l" class="overlarge">
-            <img src="drafts/PWPClient3.svg" alt="Flowchart of what happens when a Portable Web Publication is retrieved by the user"/>
-            <figcaption>Flowchart of what happens when a published <a>PWP</a> is retrieved by the user. (The image is also available in <a href="drafts/PWPClient3.svg">SVG</a> or <a href="drafts/PWPClient3.png">PNG</a> formats.)</figcaption>
+            <img src="figures/PWPClient.svg" alt="Flowchart of what happens when a Portable Web Publication is retrieved by the user" longdesc="#algorithm"/>
+            <figcaption>Visual representation of the <a href="#algorithm">algorithm</a> to retrieve the <a>PWP manifest</a>. The figure is also available in <a href="figures/PWPClient.png">PNG</a> format.</figcaption>
         </figure>
 
         <p class="issue" data-number="6" title="What is the relative priority of various manifests?">
-
     </p>
     </section>
     <section>
