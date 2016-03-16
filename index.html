@@ -176,11 +176,11 @@
         <li>The <dfn>canonical locator</dfn> is an absolute, and <a>state</a> independent <a>PWP locator</a>. This is purely conceptual, i.e., the <a>PWP</a> does not have to be published unpacked online. For the purposes of this document, the canonical locator of a PWP is denoted by <strong>L</strong>.
         </li>
 
-        <li>A <dfn>state dependent locator</dfn> is a <a>PWP locator</a> that refers to a PWP in a particular <a>state</a>. For the purposes of this document, <strong>L<sub>u</sub></strong> denotes the <a>state dependent locator</a> referring to an <a href="https://www.w3.org/TR/pwp/#state_definition">unpacked state</a>, whereas <strong>L<sub>p</sub></strong> refers to a <a>state dependent locator</a> referring to a <a href='https://www.w3.org/TR/pwp/#state_definition'>packed state</a>.
+        <li>A <dfn data-lt="state dependent locator|state dependent locators">state dependent locator</dfn> is a <a>PWP locator</a> that refers to a PWP in a particular <a>state</a>. For the purposes of this document, <strong>L<sub>u</sub></strong> denotes the <a>state dependent locator</a> referring to an <a href="https://www.w3.org/TR/pwp/#state_definition">unpacked state</a>, whereas <strong>L<sub>p</sub></strong> refers to a <a>state dependent locator</a> referring to a <a href='https://www.w3.org/TR/pwp/#state_definition'>packed state</a>.
 
             <p>There is no requirement whereby the <a>canonical locator</a> <em>must</em> be different from the locator of the published, unpacked <a>state</a> of the <a>PWP</a>.</p>
 
-            <p class="note">In practice, it may be possible to define several different PWP packaging formats, in which case there may be several <strong>L<sub>p</sub></strong>-s. Their treatment, from the point of view of this document, are identical, hence this document is restricted to a single locator of this type. Also the precise treatment of specific packaging formats (unpacking algorithms, etc.) are not relevant for this document.
+            <p class="note">In practice, it may be possible to define several different PWP packaging formats, in which case there may be several <a>state dependent locators</a> referring to packages. Their treatment, from the point of view of this document, are identical, hence this document is restricted to a single locator of this type. Also the precise treatment of specific packaging formats (unpacking algorithms, etc.) are not relevant for this document.
             </p>
 
             <p class="note">
@@ -190,9 +190,10 @@
 
         <li>A <dfn data-lt="manifest|manifest file" >manifest (file)</dfn> is a special resource containing fundamental information about a PWP. The serialization syntax and the content of a manifest is not defined in this document. A media type (see [[rfc6838]]) is also associated with a manifest (or a particular serialization thereof), that can be used when a particular instance is retrieved through standard HTTP(S) protocol.</li>
 
-        <li>A <dfn data-lt="manifest item|manifest items">manifest item</dfn> is an information item within the <a>manifest file</a> that can be retrieved by, e.g., a <a>PWP Processor</a>. These may include metadata, information on rendering order and rendition, etc. For the purpose of this document it is important that <strong>L<sub>u</sub></strong> and <strong>L<sub>p</sub></strong> are such manifest items, i.e., they can be part of a <a>manifest</a>.</li>
+        <li>A <dfn data-lt="manifest item|manifest items">manifest item</dfn> is an information item within the <a>manifest file</a> that can be retrieved by, e.g., a <a>PWP Processor</a>. These may include metadata, information on rendering order and rendition, etc. For the purpose of this document it is important that
+        <a>state dependent locators</a>, as well as the <a>canonical locator</a> are such manifest items, i.e., they can be part of a <a>manifest</a>.</li>
 
-        <li>A <dfn>PWP manifest</dfn> or <dfn>complete manifest</dfn> is a <a>manifest</a> that contains <em>all</em> <a>manifest items</a> that are required by a <a>PWP processor</a>. The complete list of required items are not defined here; for the purpose of this document it suffices to state that <strong>L</strong>, <strong>L<sub>u</sub></strong>, and <strong>L<sub>p</sub></strong> MUST be part of a <a>PWP manifest</a> if those <a data-lt="state">states</a> are indeed available on the <a>server</a>.</li>
+        <li>A <dfn>PWP manifest</dfn> or <dfn>complete manifest</dfn> is a <a>manifest</a> that contains <em>all</em> <a>manifest items</a> that are required by a <a>PWP processor</a>. The complete list of required items are not defined here; for the purpose of this document it suffices to state that the <a>canonical locator</a>, as well as all <a>state dependent locators</a> for all available <a data-lt="state">states</a>, MUST be part of a <a>PWP manifest</a>.</li>
 
         <li>The <dfn>combination of manifests</dfn>, denoted by the ⊕ operation (as in <strong>M</strong>&nbsp;=&nbsp; <strong>M<sub>a</sub></strong>&nbsp;⊕&nbsp;<strong>M<sub>b</sub></strong>) is the creation of a new <a>manifest</a>, consisting of <a data-lt="manifest item">manifest items</a> originating from <strong>M<sub>a</sub></strong> and <strong>M<sub>b</sub></strong>.
 
@@ -255,7 +256,7 @@
         <li>extract, based on <strong>L<sub>p</sub></strong>, the exact locator for additional, internal resources</li>
     </ol>
     <section>
-        <h2>Algorithm to find the right values for <strong>L<sub>p</sub></strong> and <strong>L<sub>u</sub></strong></h2>
+        <h2>Algorithm to find the right values for the <a>state dependent locators</a></h2>
 
         <p>The goal of this algorithm, with respect to the problem area of <a>PWP</a> Locators, is to obtain the values of <strong>L<sub>u</sub></strong> and <strong>L<sub>p</sub></strong>, based on the value of <strong>L</strong>. This algorithm is performed by the <a>PWP Processor</a>, typically when it is initialized with the canonical locator <strong>L</strong> of a particular <a>PWP</a> instance. The core of the algorithm consists of retrieving these values based on the HTTP(S) responses on a <code>HTTP GET</code> request on <strong>L</strong>. Clearly, establishing the values of <strong>L<sub>u</sub></strong> and <strong>L<sub>p</sub></strong> are not the only action a PWP Process has to undertake as a result of that request; this algorithm should be considered as a specific building block within a larger set of processing steps that may include, for example, rendering of the <a>PWP</a> content. </p>
         <p>In fact, the algorithm does more than just establishing the values of <strong>L<sub>u</sub></strong> and <strong>L<sub>p</sub></strong>. Instead, <em>the algorithm describes how to obtain the <a>PWP manifest</a></em>, which may contain a number of additional information (e.g., metadata, possible reading order of content, etc.) beyond the values of <strong>L<sub>u</sub></strong> and <strong>L<sub>p</sub></strong>.</p>
